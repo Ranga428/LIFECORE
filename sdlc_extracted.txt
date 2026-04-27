@@ -1,0 +1,413 @@
+=== 00_LifeCore_Master_SDLC.docx ===
+LIFECORE
+AI-Powered Life Tracker
+Master Software Development Life Cycle Plan
+1. Document Purpose
+This is the central reference document for the LifeCore development project. It maps the complete Software Development Life Cycle (SDLC) from inception through maintenance, providing a navigational hub that connects all seven phase documents.
+As a solo developer building a complex, AI-powered application, this document ensures that every phase is executed with the discipline of a full engineering team — leveraging IEEE standards adapted for a single-person workflow.
+2. Project Overview
+2.1 Application Identity
+2.2 Core Feature Landscape
+LifeCore encompasses 12 major feature domains. Each is fully scoped in Document 02 (SRS) and designed in Document 03 (SDD).
+3. SDLC Phase Overview
+The following table maps all seven phases of development. Each phase has a dedicated document in this series containing full specifications, checklists, and templates.
+4. Document Series Map
+4.1 How to Use This Series
+Each document in this series is self-contained but cross-referenced. As a solo developer, use this center document as your daily navigation tool to know which doc to consult at each stage of work.
+5. Solo Developer Strategy
+5.1 Adapted IEEE Standards
+IEEE standards are designed for teams. The following adaptations make them practical for a solo developer without sacrificing rigor:
+SRS reviews are done as self-review sessions scheduled at phase boundaries, not committee reviews.
+SDD architecture decisions are logged in an Architecture Decision Record (ADR) file instead of formal stakeholder meetings.
+Test plans execute sequentially rather than in parallel — prioritize critical paths and AI-dependent features first.
+Maintenance documentation is updated incrementally with each release rather than at planned review cycles.
+5.2 Recommended Tool Stack
+5.3 High-Level Timeline
+Estimated durations for a solo developer working part-time (~20hrs/week). Adjust based on your actual availability.
+6. Key Principles & Commitments
+6.1 IEEE Standard Commitments
+Every feature in the SRS will have a corresponding test case in the STD — no untested requirements.
+All design decisions in the SDD will trace back to a specific SRS requirement.
+The test summary report will include a formal pass/fail assessment before any production release.
+Risk registers will be maintained and reviewed at the start of each new phase.
+6.2 AI-First Development Principles
+AI features will be designed with graceful degradation — the app must remain functional if AI services are unavailable.
+All AI-generated content will be user-editable; the AI assists, the user decides.
+Privacy by design: no user data is sent to AI providers without explicit consent and clear disclosure.
+Agentic AI workflows (workout plans, tracker generation) will include preview + confirmation steps before executing.
+6.3 Quality Gates
+Each phase must meet these gates before the next phase begins:
+Planning → Requirements: Project charter approved by developer, tech stack finalized
+Requirements → Design: All features have priority ratings and acceptance criteria
+Design → Development: Architecture decision record complete, DB schema validated
+Development → Testing: All features marked 'done' in sprint board, build deploys successfully
+Testing → Deployment: Test summary report shows pass on all P0/P1 test cases
+Deployment → Maintenance: Production monitoring active, rollback plan documented
+
+=== 01_Planning_Guide.docx ===
+Phase 1: Planning
+LifeCore AI Life Tracker — Project Plan Guide
+Document 01 of 07  |  IEEE-Aligned SDLC Series
+1. Project Charter
+1.1 Executive Summary
+LifeCore is a cross-platform AI-powered life tracker designed to unify an individual's health, productivity, finance, and wellness data into a single intelligent interface. The application will use large language models, agentic AI workflows, and integration with external services (Google Calendar, nutrition APIs, finance APIs) to provide a personalized, adaptive life management system.
+1.2 Project Goals
+Deliver a fully functional AI life tracker with 12+ integrated feature domains.
+Achieve a one-prompt full tracker setup experience — the core differentiating AI feature.
+Launch on iOS App Store and Google Play Store for v1.0.
+Reach 500 active users within 3 months of public launch.
+Establish an enterprise offering for schools and companies within 12 months.
+1.3 Success Criteria
+The project is considered successful when:
+All P0 (critical) and P1 (high priority) features from the SRS are implemented and pass all test cases.
+App installs and runs without critical errors on iOS 15+ and Android 10+.
+The one-prompt tracker generation flow works end-to-end in under 10 seconds.
+Google Calendar sync is functional with < 2-second sync delay.
+Audio transcription accuracy exceeds 90% in quiet environments.
+2. Scope Definition
+2.1 In Scope — v1.0
+The following feature domains are in scope for the initial version 1.0 release:
+2.2 Out of Scope — v1.0
+Native desktop application (macOS/Windows)
+Hardware wearable integration (Apple Watch, Fitbit) — planned for v1.2
+Offline-first full sync (basic offline caching only in v1.0)
+Multi-language support (English only for v1.0)
+3. Risk Register
+Identified risks with mitigation strategies. Review at the start of each phase.
+4. Development Strategy
+4.1 Iterative Sprint Model
+As a solo developer, traditional Agile is adapted into 2-week sprints with personal retrospectives. Each sprint produces a testable increment of the application.
+4.2 Phase-by-Phase Milestones
+4.3 Technology Stack Decision
+Final technology selections — these are frozen after Planning phase sign-off.
+5. Project Constraints
+5.1 Technical Constraints
+Must support iOS 15+ and Android 10+ for mobile.
+AI API costs must remain under $200/month during development phase.
+All user data must be encrypted at rest and in transit.
+App must function with degraded (non-AI) mode when API services are unavailable.
+5.2 Business Constraints
+Solo developer — no team to delegate to. All decisions are made by one person.
+Zero budget for paid marketing in v1.0 — growth must be organic.
+Must comply with Apple App Store and Google Play Store content policies.
+GDPR and CCPA compliance required before any monetization.
+6. Planning Phase Checklist
+Complete all items before advancing to Phase 2 (Requirements):
+
+=== 02_Requirements_SRS.docx ===
+Phase 2: Requirements
+Software Requirements Specification (SRS) — IEEE Std 830
+Document 02 of 07  |  LifeCore AI Life Tracker
+1. Introduction
+1.1 Purpose
+This Software Requirements Specification describes the functional and non-functional requirements for LifeCore version 1.0. It is the authoritative reference for all development and testing activities.
+1.2 Scope
+LifeCore is a cross-platform mobile and web application enabling users to manage their entire life — scheduling, fitness, nutrition, finance, medicine, wellness, and productivity — through AI-powered interfaces. The app targets individuals, students, professionals, and enterprise teams.
+1.3 Definitions
+2. Overall System Description
+2.1 Product Perspective
+LifeCore is a standalone application that integrates with external services (Google Calendar, LLM APIs, nutrition databases, finance APIs) via adapters. It does not depend on any specific third-party platform for its core functionality.
+2.2 User Classes
+Individual User: Primary user managing personal life domains.
+Power User (Premium): Access to all AI features, unlimited templates, priority processing.
+Enterprise Admin: Manages group accounts, dashboards, and team-wide templates.
+Enterprise Member: Team member with access to shared group trackers.
+2.3 Operating Environment
+iOS 15+ (iPhone and iPad)
+Android 10+ (phones and tablets)
+Modern web browsers: Chrome 100+, Safari 15+, Firefox 100+
+Backend: Linux-based cloud infrastructure (Supabase / Vercel)
+3. Specific Requirements
+3.1 AI Life Tracker Builder
+FR-01: One-Prompt Tracker Generation
+The system shall accept a natural language prompt describing the user's life goals and generate a complete, personalized tracker dashboard within 10 seconds.
+The generated tracker shall include relevant sections based on detected intent (fitness, nutrition, schedule, finance, etc.).
+The user shall be presented with a preview before the tracker is applied.
+The user shall be able to edit any AI-generated element before confirming.
+FR-02: Tracker Editing via AI
+The system shall allow users to modify their tracker by issuing natural language edit commands (e.g., 'Add a water intake tracker').
+3.2 Smart Scheduling & Timer System
+FR-03: Event Scheduling
+The system shall allow users to create, edit, and delete scheduled events with title, date, time, duration, and recurrence settings.
+FR-04: Automatic Timer Generation
+The system shall automatically generate countdown timers for all scheduled events. Timers shall notify the user 15 minutes before, 5 minutes before, and at event start.
+FR-05: Customizable Morning Alarm with AI Snooze
+The system shall support morning alarms that, when snoozed, prompt the user with a configurable AI question (e.g., 'Why are you snoozing?'). The user must answer before the snooze is granted.
+3.3 Google Calendar Integration
+FR-06: Calendar Sync
+The system shall sync with the user's Google Calendar account via OAuth 2.0. Events created in LifeCore shall appear in Google Calendar and vice versa within 2 seconds of creation.
+FR-07: Temporary Schedule Adjustment
+The system shall allow temporary schedule adjustments that modify the display view in LifeCore without permanently altering the underlying Google Calendar event.
+3.4 Fitness & Workout Planning
+FR-08: AI Workout Plan Generator
+The system shall generate personalized workout plans from a user prompt (e.g., 'I want to lose 10 lbs in 3 months with 4 workouts per week'). The plan shall include exercises, sets, reps, rest periods, and weekly progression.
+The workout generator shall use an agentic workflow with a preview-and-confirm step.
+Generated plans shall be editable by the user.
+3.5 Nutrition & Grocery Management
+FR-09: Grocery List with Macro Calculation
+The system shall allow users to create grocery lists and display estimated macronutrients (calories, protein, carbohydrates, fat) per item and per list total.
+FR-10: Food Photo Analysis
+The system shall allow users to photograph a meal. The AI shall identify food items in the photo and estimate their caloric and macro content. Accuracy confidence shall be displayed.
+Users shall be able to correct AI estimates manually.
+Photo analysis results shall be logged to the user's daily nutrition tracker.
+3.6 Finance Manager
+FR-11: Budget Tracking
+The system shall allow users to set monthly budget categories (rent, food, entertainment, etc.) and log income and expenses. The system shall display current vs. budgeted spending with visual indicators.
+FR-12: Financial Insights
+The system shall provide AI-generated weekly financial insights summarizing spending patterns and suggesting adjustments.
+3.7 Medicine Tracker
+FR-13: Medication Schedule
+The system shall allow users to add medications with dosage, frequency, and start/end dates. The system shall send push notifications at the scheduled time.
+Users shall be able to log dose taken, skipped, or delayed.
+The system shall maintain a 30-day medication history log.
+3.8 Audio Transcription Note Taker
+FR-14: Voice Recording & Transcription
+The system shall allow users to record audio notes. The audio shall be transcribed to text using AI (Whisper API) with a processing time of under 5 seconds for recordings up to 60 seconds.
+Transcriptions shall be editable and searchable.
+Users shall be able to tag notes by category.
+3.9 PDF Book Reader
+FR-15: In-App PDF Viewer
+The system shall allow users to upload and read PDF documents within the app. The viewer shall support text highlighting, bookmarks, and annotations.
+3.10 Template Community
+FR-16: Template Sharing
+The system shall provide a community marketplace where users can publish their tracker templates, browse templates shared by others, and clone a template to their own account.
+Templates shall have ratings, tags, and download counts.
+Users must have a verified account to publish templates.
+3.11 AI Chatbot
+FR-17: Conversational Assistant
+The system shall include an AI chatbot accessible from any screen. The chatbot shall answer questions about the user's data, suggest tracker improvements, and execute commands (e.g., 'Add a hydration tracker').
+3.12 Themes
+FR-18: Theme System
+The system shall support full UI theme switching including at minimum: Gaming Theme (dark, neon, game-inspired UI), Professional Theme (clean, minimal, business-appropriate), and Light/Dark defaults.
+Theme shall optionally apply to timer appearance, notification style, and sound scheme.
+3.13 Enterprise Features
+FR-19: Group Account Management
+Enterprise admins shall be able to create group accounts, invite members, and assign shared tracker templates to the entire group.
+FR-20: Group Dashboard
+Admins shall have access to an aggregated dashboard showing group-wide progress on shared goals without exposing individual member personal data.
+4. Non-Functional Requirements
+5. Requirements Traceability Matrix
+Maps each requirement to its test case (in STD — Document 05). Update this table as requirements are added or modified.
+6. SRS Completion Checklist
+
+=== 03_Design_SDD.docx ===
+Phase 3: Design
+Software Design Description (SDD) — IEEE Std 1016
+Document 03 of 07  |  LifeCore AI Life Tracker
+1. Design Overview
+1.1 Architectural Pattern
+LifeCore uses a Client-Server architecture with a microservices-adjacent backend. The frontend is a React Native application connecting to a Node.js/Express REST API backed by PostgreSQL (via Supabase). AI features are handled through adapter services that interface with external LLM and vision APIs.
+1.2 System Context Viewpoint
+External actors and systems that interact with LifeCore:
+End User (Mobile / Web) — the primary actor
+Google Calendar API — bidirectional event sync
+Anthropic Claude / OpenAI GPT-4 — LLM for generative features
+OpenAI Whisper — audio transcription
+Google Cloud Vision — food photo analysis
+Nutrition API (USDA FoodData Central) — macro data
+Apple Push Notification Service / Firebase Cloud Messaging — push notifications
+2. Data Design
+2.1 Core Database Schema
+Key entities and their relationships. Full SQL migrations are maintained in /db/migrations/.
+users
+id (uuid PK), email, name, subscription_tier, theme, created_at, updated_at
+trackers
+id, user_id (FK→users), name, prompt_used, config_json, created_at
+tracker_sections
+id, tracker_id (FK→trackers), type (fitness/nutrition/finance/...), order_index, config_json
+events
+id, user_id, title, start_at, end_at, recurrence_rule, google_event_id, timer_enabled
+workouts
+id, user_id, plan_json, generated_prompt, week_number, status
+workout_logs
+id, workout_id, user_id, completed_at, notes, rating
+nutrition_logs
+id, user_id, logged_at, items_json (array of food items + macros), source (manual/photo/search)
+grocery_lists
+id, user_id, name, items_json (name, qty, unit, macros), created_at
+finance_entries
+id, user_id, category, amount, type (income/expense), date, notes
+medicine_schedules
+id, user_id, name, dosage, frequency_cron, start_date, end_date
+medicine_logs
+id, schedule_id, user_id, scheduled_at, taken_at, status (taken/skipped/delayed)
+audio_notes
+id, user_id, audio_url, transcript, tags_json, created_at
+templates
+id, creator_id, name, description, category_tags, config_json, is_public, download_count, rating_avg
+enterprise_groups
+id, org_name, admin_id, member_ids_json, shared_templates_json
+2.2 Row Level Security Policy
+All tables with user_id enforce Supabase Row Level Security (RLS). Users can only SELECT, INSERT, UPDATE, DELETE their own rows. Enterprise admins have additional policies for group-owned rows.
+3. API Design
+3.1 Core API Endpoints
+4. AI Integration Design
+4.1 LLM Adapter Pattern
+All LLM calls go through a single AIAdapter service. This allows switching between Anthropic Claude, OpenAI, and other providers without changing application code.
+4.2 Agentic Workflow Pattern
+Multi-step AI operations (tracker generation, workout planning) follow this pattern:
+Step 1: User submits prompt
+Step 2: AI analyzes intent and generates plan (streamed to UI)
+Step 3: System presents preview with estimated completion
+Step 4: User confirms, modifies, or cancels
+Step 5: System executes confirmed plan, saves to database
+Step 6: User receives confirmation with edit options
+5. Component Architecture
+5.1 Screen Hierarchy
+Top-level navigation and screen components:
+6. Security Design
+All API endpoints require JWT authentication (except /api/templates/community which is optionally public).
+JWTs expire in 1 hour; refresh tokens rotate on each use and expire in 30 days.
+Audio files and PDF uploads are stored in Supabase Storage with signed URL access (1-hour expiry).
+AI prompts are sanitized to prevent prompt injection attacks.
+Food photos are processed server-side and not stored permanently — only the nutritional result is saved.
+Enterprise data is isolated by organization ID in RLS policies.
+7. Design Checklist
+
+=== 04_Development_Guide.docx ===
+Phase 4: Development
+Solo Developer Build Guide — Sprint Plan & Standards
+Document 04 of 07  |  LifeCore AI Life Tracker
+1. Coding Standards
+1.1 General Principles
+Write for readability first — you are your own future maintainer.
+Functions do one thing. Files have one responsibility.
+Every AI API call has a timeout (10s), error handler, and graceful fallback.
+No hardcoded secrets — use environment variables via .env and Expo SecureStore.
+TypeScript strict mode enabled across the entire codebase.
+1.2 File Structure
+2. Sprint Plan
+12-sprint plan for 24 weeks of development (2 weeks per sprint). Adjust based on velocity.
+3. AI Integration Build Guide
+3.1 One-Prompt Tracker Generator
+This is the flagship feature. Build it in Sprint 3–4 with the following implementation steps:
+Create POST /api/tracker/generate endpoint
+Accept: { prompt: string, userId: string }
+System prompt instructs Claude to analyze life goals and output structured JSON tracker config
+Use generateStructured(prompt, TrackerConfigSchema) from AIAdapter
+Stream the generation progress to the client using Server-Sent Events
+Frontend renders a live preview of the tracker as sections stream in
+User confirms → save to trackers and tracker_sections tables
+User edits → re-run generation on the modified prompt or manual section edit
+3.2 Food Photo Analysis
+Accept image upload from mobile camera or photo library
+Send to Google Cloud Vision API for object detection
+Pass detected food items to LLM: 'Estimate macros for: [items]'
+Return structured nutrition data: { items: [{name, calories, protein, carbs, fat}], total: {...} }
+Display confidence indicator — items with low confidence are flagged for user correction
+3.3 Agentic Workout Generator
+Step 1: Parse user prompt for goals, duration, equipment, frequency
+Step 2: LLM generates weekly plan JSON (days × exercises × sets/reps)
+Step 3: Show full plan preview before saving
+Step 4: User can approve, edit individual exercises, or regenerate
+Step 5: Save to workouts table; auto-schedule workouts as calendar events
+4. Theme System Implementation
+The theme system is defined in /theme/index.ts and applied via React Context.
+Theme tokens: colors, typography, spacing, border radius, shadow, icon set
+Theme change applies instantly (no app restart) via React Context update
+Optional: theme scheduler — auto-switch gaming theme at certain hours
+5. Definition of Done
+A feature is 'Done' when ALL of the following are true:
+
+=== 05_Testing_STD.docx ===
+Phase 5: Testing
+Software Test Documentation (STD) — IEEE Std 829
+Document 05 of 07  |  LifeCore AI Life Tracker
+1. Test Plan (Master)
+1.1 Scope
+In Scope: All P0 and P1 functional requirements from the SRS, all non-functional requirements with measurable metrics, security and authentication flows, Google Calendar sync, all AI feature happy paths and fallback paths.
+Out of Scope: Enterprise features (tested separately pre-enterprise launch), third-party API internal behavior, platform-specific UI rendering differences beyond critical breakpoints.
+1.2 Test Approach
+Unit Testing: Jest for utility functions, Zustand stores, and API service layers.
+Integration Testing: Supertest for API endpoints, Supabase test client for DB operations.
+End-to-End Testing: Detox (mobile) and Playwright (web) for critical user flows.
+Manual Exploratory Testing: One full exploratory session per sprint.
+AI Feature Testing: Human evaluation rubric for AI output quality.
+1.3 Pass/Fail Criteria
+PASS: Actual result matches expected result exactly, or within specified tolerance.
+FAIL: Any deviation from expected result. All FAILs are logged as incidents.
+BLOCK: Test cannot execute due to environment or dependency issue.
+Overall release gate: 100% of P0 tests pass, ≥95% of P1 tests pass.
+1.4 Suspension/Resumption Criteria
+Testing is SUSPENDED if: More than 3 P0 bugs are open simultaneously, the build fails to install on test device, or core auth fails.
+Testing RESUMES when: All open P0 bugs are fixed and verified, a new clean build is available.
+2. Test Cases
+2.1 Critical Path Test Cases (P0)
+2.2 High Priority Test Cases (P1)
+3. AI Feature Evaluation Rubric
+AI-generated outputs are evaluated on the following dimensions. Rate 1–5 for each test run.
+4. Non-Functional Test Cases
+5. Bug Reporting (Incident Report Template)
+6. Test Summary Report Template
+7. Testing Checklist
+
+=== 06_Deployment_Guide.docx ===
+Phase 6: Deployment
+Release & Go-Live Guide — CI/CD, App Stores & Production
+Document 06 of 07  |  LifeCore AI Life Tracker
+1. Release Environments
+2. CI/CD Pipeline
+2.1 GitHub Actions Workflow
+On every PR: Run TypeScript type check, Jest unit tests, ESLint
+On merge to main: Run full test suite, build staging Expo app via EAS, deploy backend to staging (Railway/Render)
+On release tag (v1.x.x): Build production iOS .ipa and Android .aab via EAS, submit to TestFlight and Play Internal Track
+2.2 Environment Variables
+All secrets managed via GitHub Actions secrets and Expo EAS secrets. Never commit .env to repository.
+3. App Store Submission
+3.1 Apple App Store
+3.2 Google Play Store
+4. Backend Deployment
+5. Monitoring & Alerting
+Sentry: Error tracking for both frontend and backend. Alerts for new error types and spike in error rate.
+PostHog: User analytics — track feature adoption, session length, funnel completion.
+Supabase Dashboard: Monitor DB performance, query times, and connection pooling.
+Uptime monitoring: BetterUptime or similar — alert via email/SMS if API goes down.
+AI API spend: Set monthly budget alerts in Anthropic and OpenAI consoles.
+6. Rollback Plan
+7. Go-Live Checklist
+
+=== 07_Maintenance_Plan.docx ===
+Phase 7: Maintenance
+Long-Term Support, Updates & Growth Plan
+Document 07 of 07  |  LifeCore AI Life Tracker
+1. Version & Update Strategy
+1.1 Patch Protocol
+P0 bug (crash, data loss): Hotfix in progress within 4 hours, shipped within 48 hours.
+P1 bug (broken feature): In next minor release cycle (≤2 weeks).
+P2/P3 bug: In backlog, addressed in upcoming sprint.
+All fixes require a test case to prevent regression.
+2. User Feedback Loop
+2.1 Feedback Channels
+In-app feedback button (accessible from Settings → Send Feedback)
+App Store and Play Store reviews — reviewed weekly
+Community Discord or Reddit community — monitored daily at launch
+Beta user interviews — 1-on-1 calls, at least 3 per month in first 6 months
+2.2 Feedback Processing
+All feedback logged to Linear/Notion with tags: Bug, Feature Request, UX, AI Quality, Content
+Monthly review: triage feedback, promote items to backlog
+Quarterly: release a community roadmap update (what's coming in next 3 months)
+3. Roadmap — Post-Launch
+4. Enterprise Onboarding Process
+The enterprise tier is planned for post-v1.0 launch. Onboarding flow:
+Lead contacts via enterprise form on website or direct outreach.
+Demo call (30 min) with screen share of the group features.
+Pilot: 30-day free trial for up to 20 members.
+Conversion: Monthly or annual billing via Stripe. Pricing: $8/member/month (min 10 members).
+Onboarding kit: Pre-built professional templates, admin setup guide, Slack/Teams integration guide.
+4.1 Enterprise Feature Roadmap
+v1.4: Web-based admin dashboard, user management, group template assignment
+v1.5: Progress reports (weekly PDF digest for admins), SCIM provisioning for SSO
+v2.0: API access, Zapier/Make integration, custom branding (white-label option)
+5. AI Model Maintenance
+Monitor Anthropic and OpenAI changelogs monthly — breaking API changes must be patched immediately.
+Re-evaluate AI provider costs quarterly — switch providers if cost/quality ratio improves.
+Prompt audits quarterly: test all system prompts against edge cases and update for quality.
+AI feature A/B testing: Use PostHog to test variations of key prompts with real users.
+6. Security Maintenance
+Dependency audit: npm audit monthly, address all high and critical vulnerabilities immediately.
+JWT secret rotation: Every 6 months, with a grace period for in-flight tokens.
+GDPR data export and deletion: Implement user data export and account deletion within 30 days of launch.
+Penetration test: Annually via an automated tool (OWASP ZAP) or paid pentest service.
+AI safety review: Quarterly check that no prompt injection vulnerabilities exist in AI endpoints.
+7. Maintenance Checklist (Monthly)
+8. Maintenance Checklist (Quarterly)
