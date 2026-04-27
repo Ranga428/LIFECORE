@@ -5,7 +5,7 @@
       "name": "Local Models",
       "options": {
         "baseURL": "http://localhost:12434/v1",
-        "apiKey": "AIzaSyC3s5uMxVM88dTe7LmX1bPVD8xOtwVwP6Y"
+        "apiKey": "${OPENCODE_API_KEY}"
       }
     }
   }
